@@ -1,0 +1,104 @@
+#include<iostream>
+#include<cstdlib>
+using namespace std;
+class Dayofyear
+{
+public:
+    Dayofyear(int monthValue,int dayValue);
+    Dayofyear(int monthValue);
+    Dayofyear();
+    void output();
+private:
+    int month;
+    int day;
+    void TestDate();
+};
+
+class Holiday
+{
+public:
+    Holiday(int month,int day,bool theEnforcement);
+    Holiday();
+    void output();
+private:
+    Dayofyear date;
+    bool parkingEnforcement;
+};
+int main()
+{
+    Holiday h(2,14,false);
+    cout<<"Testing the class Holiday.\n";
+    h.output();
+    return 0;
+}
+Holiday ::Holiday(int month,int day,bool theEnforcement):date(month,day),parkingEnforcement(theEnforcement)
+{}
+Holiday :: Holiday():date(1,1),parkingEnforcement(false)
+{}
+Dayofyear::Dayofyear(int monthValue,int dayValue):month(monthValue),day(dayValue)
+{
+    TestDate();
+}
+Dayofyear::Dayofyear(int monthValue):month(monthValue),day(1)
+{
+    TestDate();
+}
+Dayofyear::Dayofyear(): month(1),day(1)
+{
+    TestDate();
+}
+void Dayofyear::TestDate()
+{
+    if ((month<1)||(month>12))
+    {
+        cout<<"illeagal month value!\n";
+        exit(1);
+    }
+    if ((day<1)||(day>31))
+    {
+        cout<<"illeagal day value!\n";
+        exit(1);
+    }
+}
+void Holiday :: output()
+{
+    date.output();
+    cout<<endl;
+    if (parkingEnforcement)
+        cout<<"Parking laws will be enforced.\n";
+    else
+        cout<<"Parking laws will not be enforced.\n";
+}
+void Dayofyear :: output()
+{
+    switch(month)
+    {
+        case 1:
+            cout<<"January";break;
+        case 2:
+            cout<<"February";break;
+        case 3:
+            cout<<"March";break;
+        case 4:
+            cout<<"April";break;
+        case 5:
+            cout<<"May";break;
+        case 6:
+            cout<<"June";break;
+        case 7:
+            cout<<"July";break;
+        case 8:
+            cout<<"Auguest";break;
+        case 9:
+            cout<<"September";break;
+        case 10:
+            cout<<"October";break;
+        case 11:
+            cout<<"November";break;
+        case 12:
+            cout<<"December";break;
+        default:
+            cout<<"Error in Dayofyear::output()";
+    }
+    cout<<' '<<day;
+}
