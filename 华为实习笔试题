@@ -1,0 +1,54 @@
+//给一个输入的字符串，输出其对称的子字符串的最大长度
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+//本代码本地可以编译成功，并且运行了几个测试用例都可以通过，不知为何这里无法通过。
+bool issym(char* start,char* end)
+{
+    if (start==nullptr||end==nullptr||end<start)
+        return false;
+    while(start<end)
+    {
+        if (*start!=*end)
+            return false;
+        start++;
+        end--;
+    }
+    return true;
+}
+
+int GetMaxLenOfSting(char* symstring)
+{
+    if (symstring==nullptr)
+        return 0;
+    int maxlength=0;
+    char* start=symstring;
+    long length=strlen(symstring);
+    while(start<&symstring[length-1])
+    {
+        char* end=start+1;
+        while(end<=&symstring[length-1])
+        {
+            if (issym(start,end))
+            {
+                int maxlengthtemp=end-start+1;
+                if (maxlength<maxlengthtemp)
+                    maxlength=maxlengthtemp;
+            }
+            end++;
+        }
+        start++;
+    }
+    return maxlength;
+}
+int main()
+{
+    char* symstring=new char[100];
+    cout<<"enter the string"<<endl;
+    while(cin >> symstring)//注意while处理多个case
+        cout<<GetMaxLenOfSting(symstring)<<endl;
+    delete [] symstring;
+    return 0;
+}
+
