@@ -1,0 +1,25 @@
+剑指offer 调整数组顺序使奇数位于偶数前面。(书上解法)
+注：此段代码无法包装原来奇数与奇数，偶数与偶数之间的相对位置不变
+class Solution {
+public:
+    void reOrderArray(vector<int> &array) {
+        int length=array.size();
+        if (array.empty())
+            return;
+        int pleft=0;
+        int pright=length-1;
+        while(pleft<pright)
+        {
+            while(pleft<pright&&(array[pleft]&0x1)!=0)//用位与运算判断一个数是否为偶数，!=0表示为奇数
+                pleft++;
+            while(pleft<pright&&(array[pright]&0x1)==0)
+                pright--;
+            if(pleft<pright)
+            {
+                int temp=array[pleft];
+                array[pleft]=array[pright];
+                array[pright]=temp;
+            }
+        }
+    }
+};
