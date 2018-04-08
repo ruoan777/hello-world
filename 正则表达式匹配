@@ -27,7 +27,7 @@ public:
             return false;
         if(*(pattern+1)!='*')//当模式中的第二个字符不是“*”时：
         {
-            if(*str==*pattern||(*pattern=='.'&&*str!='\0'))
+            if(*str==*pattern||(*pattern=='.'&&*str!='\0')) //注：s=='',p=='.'，属于不匹配
                 return matchcore(str+1,pattern+1);
             else
                 return false;
