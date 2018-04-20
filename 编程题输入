@@ -1,0 +1,41 @@
+#include<iostream>
+using namespace std;
+int  statNumber(int n);
+int count(int n, int x) ;
+int main()
+{
+    int numOfData=0;
+    cin>>numOfData;
+    for(int i=0;i<numOfData;i++)
+    {
+        int temp;
+        temp=13;
+        int sum=0;
+        for (int i=0;i<10;i++)
+        {
+            sum+=count(temp, i);
+        }
+        cout<<sum<<endl;
+    }
+    return 0;
+}
+int count(int n, int x){
+    int res = 0;
+    int j;
+    for (int i = 1;j=n/i; i *= 10) {
+        int high = j / 10;
+        if (x == 0) {
+            if (high)
+                high--;
+            else
+                break;
+        }
+        res += high * i;
+        int tem = j % 10;
+        if (tem > x)
+            res += i;
+        else if (tem == x)
+            res += n - j * i + 1;
+    }
+    return res;
+}
