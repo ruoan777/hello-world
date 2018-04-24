@@ -1,7 +1,8 @@
 2018年4.24日
-早上：做了面试题39:数组中出现次数超过一半的数字，并引申了leetcode229:找出数组中出现次数超多1/3的元素。
+早上：做了面试题39:数组中出现次数超过一半的数字，并引申了leetcode229:找出数组中出现次数超多1/3的元素。(不是动态规划)
 下午：看了youtube上面MIT关于动态规划的一个章节视频https://www.youtube.com/watch?v=OQ5jsbhAv_M
-晚上：刷了几题动态规划。
+晚上：刷了几题动态规划。在youtube上找到一个讲解leetcode题的博主Edward Shi，通过看视频效率还是比较高。
+
 
 
 题目：
@@ -22,9 +23,6 @@
 res[i][j]=grid[i][j]+min(res[i][j-1],res[i-1][j]); 
 然后依次更新res的每一个元素即可，注意三个if判断，分别是针对res(grid)的第一行，第一列，以及其他元素进行操作。
 
-优化：
-由于第m行的值与第m-1行和第m行有关，因此可以对res进行简化，仅用列数大小的的res。
-同样注意三个if判断，分别是针对grid的第一行，第一列,以及其他元素的操作。
 代码：
 class Solution {
 public:
@@ -43,15 +41,19 @@ public:
     int min(int a,int b){
         return a<b ? a : b;
     }*/
+    
     int minPathSum(vector<vector<int>>& grid) {
+    /*优化：
+        由于第m行的值与第m-1行和第m行有关，因此可以对res进行简化，仅用列数大小的的res。
+        同样注意三个if判断，分别是针对grid的第一行，第一列,以及其他元素的操作。*/
         //这种解法只需要申请一个大小为列数的数组，复杂度降低,更加可以解决上面的问题。
         vector<int> res(grid[0].size(),0);
         res[0]=grid[0][0];
         for(int i = 0; i < grid.size(); i++)
             for(int j = 0; j < grid[0].size(); j++){
-                if(i == 0 && j != 0)res[j]=grid[i][j]+res[j-1];
-                if(i != 0 && j == 0)res[j]=grid[i][j]+res[j];
-                if(i != 0 && j != 0)res[j]=grid[i][j]+min(res[j-1],res[j]); 
+                if(i == 0 && j != 0)res[j]=grid[i][j]+res[j-1];//第一行，直接对后续元素加上前序元素即可
+                if(i != 0 && j == 0)res[j]=grid[i][j]+res[j];//第一列，同上，对下面的直接元素加上上面元素即可
+                if(i != 0 && j != 0)res[j]=grid[i][j]+min(res[j-1],res[j]); //else,注意比较前后两个元素的最小值
             }
         return res[grid[0].size()-1];
     }
@@ -60,3 +62,38 @@ public:
     }
 };
 
+题目：
+leetcode 62 不同路径
+一个机器人位于一个 m x n 网格的左上角。
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角。
+问总共有多少条不同的路径？
+
+思路：
+其实与上面的题类似，只不过这里没有了“礼物的价值”，到达(i,j)的路径个数等于到达(i-1,j)的路径个数加上到达(i,j-1)的路径个数。
+同样可以申请一个m*n的数组，但是这样空间复杂度有点高。
+也可以用相同的思路进行优化，只申请一个大小为n的数组，可以大大降低空间复杂度。
+代码：
+class Solution {
+public:
+    /*int uniquePaths(int m, int n) {
+        //申请了一个m*n的数组，空间复杂度有点高
+        vector<vector<int>> res(n,vector<int>(m, 1));
+        for(int i = 0; i < n; i++)
+            for (int j = 0; j < m; j++){
+                if (i==0 && j != 0)res[i][j]=1;
+                if (i!=0 && j == 0)res[i][j]=1;
+                if (i!=0 && j != 0)res[i][j]=res[i][j-1]+res[i-1][j]; 
+            }
+        return res[res.size()-1][res[0].size()-1];
+    }*/
+    int uniquePaths(int m, int n) {//m为列数，n为行数
+        //只申请了一个大小为n的数组，空间复杂度大大降低
+        vector<int> res(m,0);
+        res[0]=1;
+        for(int i = 0; i < n; i++)
+            for(int j = 1; j < m; j++){
+                res[j]=res[j]+res[j-1];
+            }
+        return res[m-1];
+    }
+};
