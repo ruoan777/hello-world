@@ -1,0 +1,62 @@
+2018年4.24日
+早上：做了面试题39:数组中出现次数超过一半的数字，并引申了leetcode229:找出数组中出现次数超多1/3的元素。
+下午：看了youtube上面MIT关于动态规划的一个章节视频https://www.youtube.com/watch?v=OQ5jsbhAv_M
+晚上：刷了几题动态规划。
+
+
+题目：
+面试题47 礼物的最大价值(leetcode 64 最小路径和)
+在一个m * n的棋盘的每一个格都放有一个礼物，每个礼物都有一定价值（大于0）。
+从左上角开始拿礼物，每次向右或向下移动一格，直到右下角结束。
+给定一个棋盘，求拿到礼物的最大价值。
+
+例如，对于如下棋盘
+1  10 3  8
+12 2  9  6
+5  7  4  11
+3  7  16 5
+礼物的最大价值为1+12+5+7+7+16+5=53
+
+思路：
+申请一个与原矩阵行列数一样的二维数组res(或者可以直接在原数组上操作，但这样会改变数组的元素，有可能不满足面试官要求)
+res[i][j]=grid[i][j]+min(res[i][j-1],res[i-1][j]); 
+然后依次更新res的每一个元素即可，注意三个if判断，分别是针对res(grid)的第一行，第一列，以及其他元素进行操作。
+
+优化：
+由于第m行的值与第m-1行和第m行有关，因此可以对res进行简化，仅用列数大小的的res。
+同样注意三个if判断，分别是针对grid的第一行，第一列,以及其他元素的操作。
+代码：
+class Solution {
+public:
+    /*int minPathSum(vector<vector<int>>& grid) {
+        //这种做法会改变原来的数组
+        vector<vector<int>> res(grid.size(),vector<int>(grid[0].size(),0));
+        res[0][0]=grid[0][0];
+        for(int i = 0; i < grid.size(); i++)
+            for(int j = 0; j<grid[0].size(); j++){
+                if (i==0 && j != 0)res[i][j]=grid[i][j]+res[i][j-1];
+                if (i!=0 && j == 0)res[i][j]=grid[i][j]+res[i-1][j];
+                if (i!=0 && j != 0)res[i][j]=grid[i][j]+min(res[i][j-1],res[i-1][j]); 
+            }
+        return res[res.size()-1][res[0].size()-1];
+    }
+    int min(int a,int b){
+        return a<b ? a : b;
+    }*/
+    int minPathSum(vector<vector<int>>& grid) {
+        //这种解法只需要申请一个大小为列数的数组，复杂度降低,更加可以解决上面的问题。
+        vector<int> res(grid[0].size(),0);
+        res[0]=grid[0][0];
+        for(int i = 0; i < grid.size(); i++)
+            for(int j = 0; j < grid[0].size(); j++){
+                if(i == 0 && j != 0)res[j]=grid[i][j]+res[j-1];
+                if(i != 0 && j == 0)res[j]=grid[i][j]+res[j];
+                if(i != 0 && j != 0)res[j]=grid[i][j]+min(res[j-1],res[j]); 
+            }
+        return res[grid[0].size()-1];
+    }
+    int min(int a,int b){
+        return a<b ? a : b;
+    }
+};
+
