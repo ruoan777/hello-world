@@ -1,0 +1,13 @@
+#include <iostream>
+#include <string>
+using namespace std;
+int main ()
+{
+    int dateToNum=20180304;
+    string s =to_string(dateToNum);//int to string
+    string zichuan=s.substr(0,4);
+    int b=stoi(zichuan);//string to int
+    cout<<b;
+    return 0;
+}
+
