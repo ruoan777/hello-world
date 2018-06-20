@@ -1,0 +1,177 @@
+#include <cstdio>
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+
+/* 带附加头结点的单链表的类定义 */
+
+typedef struct PolyNode* Polynomial;//指向结点的指针
+struct PolyNode          //链表结点类的定义
+{
+    int coef;            //系数
+    int expon;           //指数
+    Polynomial link;     //链指针域
+};
+
+/*  函数声明部分  */
+Polynomial ReadPoly();
+void Attach(int c,int e,Polynomial *pRear);
+Polynomial Add(Polynomial P1,Polynomial P2);
+Polynomial Mult(Polynomial P1,Polynomial P2);
+void PrintPoly(Polynomial P);
+
+int main()
+{
+    Polynomial P1,P2,PP,PS;
+    
+    P1 = ReadPoly();
+    P2 = ReadPoly();
+    PP = Mult(P1,P2);
+    PrintPoly(PP);
+    PS = Add(P1,P2);
+    PrintPoly(PS);
+    
+    return 0;
+    
+}
+
+Polynomial ReadPoly()    //读入多项式构成链表，并返回链表的头指针
+{
+    Polynomial first,rear,t;
+    int N,c,e;
+    scanf("%d",&N);
+    
+    first = new PolyNode;//链表附加头结点,这样可以免除首节点的判断，保持了操作的一致性
+    first->link = NULL;
+    rear = first;
+    while (N--)
+    {
+        scanf("%d %d",&c,&e);
+        Attach(c,e,&rear);    //将当前项插入多项式链表尾部
+    }
+    t = first; first = first->link; delete t;//最后删除附加头结点
+    return first;
+}
+
+void Attach(int c,int e,Polynomial *pRear)//将当前项插入多项式链表尾部
+{
+    Polynomial P;
+    P = new PolyNode;        //创建新节点
+    P->coef = c;
+    P->expon = e;
+    P->link = NULL;
+    (*pRear)->link = P;      //连接新结点
+    *pRear = P;              //尾指针指向新节点
+}
+
+Polynomial Add(Polynomial P1,Polynomial P2)//多项式加法
+{
+    Polynomial first,rear,t;
+    int sum;
+    first = new PolyNode;    //链表附加头结点
+    first->link = NULL;
+    rear = first;
+    while(P1&&P2)
+    {
+        if (P1->expon == P2->expon)//两数据项指数相等
+        {
+            sum = P1->coef + P2->coef;
+            if(sum)    Attach(sum,P1->expon,&rear);//注意判断系数和是否为0
+            P1 = P1->link;
+            P2 = P2->link;
+        }
+        else if (P1->expon > P2->expon)      //P1中的数据项指数较大
+        {
+            Attach(P1->coef,P1->expon,&rear);//把此P1项结点插入到结果多项式链表中
+            P1 = P1->link;
+        }
+        else
+        {
+            Attach(P2->coef,P2->expon,&rear);
+            P2 = P2->link;
+        }
+        
+    }
+    /*  将未处理完的另一个多项式的所有节点依次复制到结果多项式中去  */
+    for(;P1;P1=P1->link)    Attach(P1->coef,P1->expon,&rear);
+    for(;P2;P2=P2->link)    Attach(P2->coef,P2->expon,&rear);
+    
+    t = first; first = first->link; delete t;//删除附加头结点
+    return first;
+}
+
+Polynomial Mult(Polynomial P1,Polynomial P2)
+{
+    Polynomial first,rear,temp,sP2;
+    int c,e;
+    if(!P1||!P2)    return NULL;
+    
+    first = new PolyNode;//链表附加头结点
+    first->link = NULL;
+    rear = first;
+    
+    sP2 = P2;    //保存一下P2初始位置
+    
+    while(P2)    //先用P1的第一项乘以P2,得到一个结果多项式链表
+    {
+        Attach(P1->coef*P2->coef,P1->expon+P2->expon,&rear);
+        P2 = P2->link;
+    }
+    P1 = P1->link;
+    while (P1)    //再用P1的其它项乘以P2，将结果添加到前面的多项式链表中
+    {
+        P2 = sP2;        //恢复P2初始位置
+        rear = first;    //从表头开始扫描结果多项式链表
+        while (P2)
+        {
+            c = P1->coef*P2->coef;
+            e = P1->expon+P2->expon;
+            while (rear->link && rear->link->expon > e)     //结果多项式链表中的数据项指数较大
+            {
+                rear = rear->link;
+            }
+            if(rear->link && rear->link->expon == e)    //两数据项指数相等
+            {
+                if(rear->link->coef + c)    //系数和非0
+                    rear->link->coef += c;
+                else                        //系数和为0，需要在结果多项式链表中删除次表项
+                {
+                    temp = rear->link;
+                    rear->link = temp->link;
+                    delete temp;
+                }
+            }
+            else                                        //结果多项式链表中的数据项指数较小
+            {
+                temp = new PolyNode;
+                temp->coef = c;
+                temp->expon = e;
+                temp->link = rear->link;        //把新表项插入到结果多项式链表中
+                rear->link = temp;
+                rear = rear->link;
+                
+            }
+            P2 = P2->link;
+        }
+        P1 = P1->link;
+    }
+    temp = first; first = first->link; delete temp;//删除附加头结点
+    return first;
+}
+
+void PrintPoly(Polynomial P)    //输出多项式
+{
+    int flag=0;        //输出序号，用来辅助调整输出格式
+    if(!P){ printf("0 0\n"); return;}  //当多项式链表为空
+    
+    while(P)
+    {
+        if(!flag)    flag=1;  //第一次输出,没有前置空格
+        else   printf(" ");   //输出前置空格
+        printf("%d %d",P->coef,P->expon);
+        P = P->link;
+    }
+    printf("\n");
+    
+}
