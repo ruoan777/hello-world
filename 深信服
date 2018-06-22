@@ -1,0 +1,103 @@
+#include <iostream>
+#include <vector>
+#include <cstdio>
+
+using namespace std;
+bool flag[10] = { false };
+void Output(int* a, int n){
+    int count=0;
+    for(int i=0;i<10;i++){
+        if(flag[i]==true)
+            count++;
+    }
+    cout<<count<<endl;
+    for(int i = 0; i < n; i++){
+        if(flag[i]){
+            cout << i+1 << endl ;
+        }
+    }
+}
+void FixedSum(int* a, int n, int t, int sum){
+   if(sum == 0)
+        Output(a, t) ;
+    else
+    {
+        if(t == n)
+            return ;
+        else
+        {
+            flag[t] = true ;
+            if(sum - a[t] >= 0)
+                FixedSum(a, n, t + 1, sum - a[t]) ;
+            flag[t] = false ;
+            if(sum >= 0)
+                FixedSum(a, n, t + 1, sum) ;
+        }
+    }
+}
+int main(){
+    int n;
+    cin>>n;
+    int* a=new int[n];
+    for(int j = 0; j < n; j++)
+        scanf("%d",&a[j]);
+    FixedSum(a,n,0,100);
+    return 0;
+}
+
+
+
+#include <iostream>
+#include<vector>
+#include <cstdio>
+
+using namespace std;
+
+int delete_elem(int arr[],int new_arr[],int n){
+    int i = 0, new_arr_len = 0;
+    vector<int> flag(1000,0);//对每个元素做一个初始标记
+    for ( i = 0; i < n; i++){
+        if (flag[arr[i]] == 0){
+            new_arr[new_arr_len++] = arr[i];
+            flag[arr[i]] = 1;//出现过则标记属性设为1
+        }
+    }
+    return new_arr_len;
+}
+int main(){
+    int n;
+    cin>>n;
+    int* a=new int[n];
+    int* b=new int[n];
+    for(int j = 0; j < n; j++)
+        scanf("%d",&a[j]);
+    int new_array_len=delete_elem(a,b,n);
+    if(new_array_len<=10){
+        cout<<new_array_len<<endl;
+        for(int i=0;i<new_array_len;i++)
+            cout<<b[i]<<endl;
+    }
+    else{
+        cout<<10<<endl;
+        for(int i=0;i<10;i++)
+            cout<<b[i]<<endl;
+    }
+        
+}
+
+
+
+#include <iostream>
+#include <cstdio>
+
+using namespace std;
+
+int main(){
+    int n,k = 0;
+    cin >>n>>k;
+    if(k>=n-1)
+        cout<<"Yes";
+    else
+        cout<<"No";
+    return 0;
+}
