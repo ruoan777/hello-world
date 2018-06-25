@@ -1,4 +1,3 @@
-//二叉搜索树的操作集
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -34,6 +33,7 @@ int main()
         BST = Insert(BST, X);
     }
     printf("Preorder:"); PreorderTraversal(BST); printf("\n");
+     printf("Inorder:"); InorderTraversal(BST); printf("\n");
     MinP = FindMin(BST);
     MaxP = FindMax(BST);
     scanf("%d", &N);
@@ -52,6 +52,7 @@ int main()
         scanf("%d", &X);
         BST = Delete(BST, X);
     }
+    printf("Preorder:");PreorderTraversal(BST);cout<<endl;
     printf("Inorder:"); InorderTraversal(BST); printf("\n");
     
     return 0;
@@ -70,30 +71,36 @@ BinTree Insert( BinTree BST, ElementType X ){
     }
     return BST;
 }
-BinTree Delete( BinTree BST, ElementType X ){\
-    Position Tmp;
-    if(BST==nullptr){
-        cout<<"Not found";
-    }
-    else if(BST->Data>X)
-        BST->Left=Delete(BST->Left,X);
-    else if(BST->Data<X)
-        BST->Right=Delete(BST->Right,X);
-    else{
-        if(BST->Left&&BST->Right){
-            Tmp=FindMin(BST->Right);
-            BST->Data=Tmp->Data;
-            BST->Right=Delete(BST->Right,BST->Data);
-        }else{
-            Tmp=BST;
-            if(!BST->Left)
-                BST=BST->Right;
-            else if(!BST->Right)
-                BST=BST->Left;
-            free(Tmp);
+BinTree Delete( BinTree BST, ElementType X ){
+        BinTree temp;
+        if (BST == NULL)
+            printf("Not Found\n");
+        else
+        {
+            if (X < BST->Data)
+                BST->Left = Delete(BST->Left, X);
+            else if (X > BST->Data)
+                BST->Right = Delete(BST->Right, X);
+            else
+            {
+                if (BST->Left && BST->Right)
+                {
+                    temp = FindMin(BST->Right);
+                    BST->Data = temp->Data;
+                    BST->Right = Delete(BST->Right, temp->Data);
+                }
+                else
+                {
+                    temp = BST;
+                    if (BST->Left == NULL)
+                        BST = BST->Right;
+                    else if (BST->Right == NULL)
+                        BST = BST->Left;
+                    free(temp);
+                }
+            }
         }
-    }
-    return BST;
+        return BST;
 }
 Position Find( BinTree BST, ElementType X ){
     if(BST==nullptr)
@@ -131,8 +138,8 @@ void PreorderTraversal( BinTree BT ){
 }
 void InorderTraversal( BinTree BT ){
     if(BT){
-        PreorderTraversal(BT->Left);
+        InorderTraversal(BT->Left);
         cout<<BT->Data<<" ";
-        PreorderTraversal(BT->Right);
+        InorderTraversal(BT->Right);
     }
 }
