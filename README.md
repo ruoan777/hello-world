@@ -1,2 +1,3 @@
 # hello-world
-This is my first Github repository!
+
+这个文件夹仅用作日常记录使用。
