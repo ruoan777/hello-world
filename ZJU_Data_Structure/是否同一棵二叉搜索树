@@ -1,0 +1,122 @@
+#include<stdio.h>
+#include <iostream>
+using namespace std;
+struct TreeNode{
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    int flag;
+};
+typedef struct TreeNode *tree;
+
+tree MakeTree(int N);
+bool Judge(tree T,int N);
+void Reset(tree T);
+void FreeTree(tree T);
+tree newNode(int v);
+tree insert(tree T,int v);
+bool check(tree T,int v);
+int main(){
+    tree T;
+    int i,N,L;
+    cout<<"输入树的节点的个数"<<endl;
+    cin>>N;
+    while(N){
+        cout<<"输入要比较的序列的个数"<<endl;
+        cin>>L;
+        T=MakeTree(N);
+        for(i=0;i<N;i++){
+            if(Judge(T,N))
+                cout<<"Yes"<<endl;
+            else
+                cout<<"No"<<endl;
+            Reset(T);
+        }
+        FreeTree(T);
+        cin>>N;
+    }
+    return 0;
+}
+tree MakeTree(int N){
+    int i=1,v;
+    tree T;
+    cout<<"输入1个数表示序列的第一个元素"<<endl;
+    cin>>v;
+    T=newNode(v);
+    while(i<N){
+        cout<<"输入"<<N-1<<"个数目表示序列的其他元素"<<endl;
+        cin>>v;
+        T=insert(T,v);
+        i++;
+    }
+    return T;
+}
+tree newNode(int v){
+    tree T;
+    T=(tree)malloc(sizeof(TreeNode));
+    T->val=v;
+    T->left=T->right=nullptr;
+    T->flag=0;
+    return T;
+}
+tree insert(tree T,int v){
+    if(!T){
+        T=newNode(v);
+    }
+    if(T->val>v){
+        T->left=insert(T->left,v);
+    }
+    else if (T->val<v){
+        T->right=insert(T->right,v);
+    }
+    return T;
+}
+bool Judge(tree T,int N){
+    int i,flag=0,v;
+    cout<<"输入要比较的序列"<<endl;
+    /*cin>>v;
+    if(v!=T->val)
+        flag=1;
+    else
+        T->flag=1;*/
+    for(i=0;i<N;i++){
+        cin>>v;
+        if( flag==0 && (!check(T,v)) )
+            flag=1;
+    }
+    if(flag==1)
+        return false;
+    else
+        return true;
+}
+bool check(tree T,int v){
+    if(T->flag==1){
+        if(T->val>v)
+            return check(T->left,v);
+        else if (T->val<v)
+            return check(T->right,v);
+        else
+            return false;
+    }
+    else{
+        if(T->val==v){
+            T->flag=1;
+            return true;
+        }
+        else return false;
+    }
+}
+void Reset(tree T){
+    T->flag=0;
+    if(T->left)
+        Reset(T->left);
+    if(T->right)
+        Reset(T->right);
+}
+void FreeTree(tree T){
+    if(T->left)
+        FreeTree(T->left);
+    if(T->right)
+        FreeTree(T->right);
+    free(T);
+}
