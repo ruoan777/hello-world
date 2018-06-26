@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+
+#define MAXN 1001
+#define MINH -10001
+using namespace std;
+int H[MAXN],size;
+void create(int N);
+void insert(int val);
+int main(){
+    int N,M;
+    int i;
+    cout<<"输入堆中元素个数及查询次数"<<endl;
+    cin>>N>>M;
+    create(N);//建立最小堆
+    cout<<"输入"<<M<<"个数表示需要打印的路径"<<endl;
+    while(M){
+        cin>>i;
+        cout<<H[i]<<" ";
+        while(i>1){
+            i/=2;
+            cout<<H[i]<<" ";
+        }
+        M--;
+        cout<<endl;
+    }
+    return 0;
+}
+void create(int N){
+    size=0;
+    H[0]=MINH;
+    int val;
+    cout<<"输入"<<N<<"个数字表示要建堆的元素序列"<<endl;
+    for(int i=0;i<N;i++){
+        cin>>val;
+        insert(val);
+    }
+}
+void insert(int val){
+    if(size>MAXN){
+        cout<<"堆已经满了"<<endl;
+        return;
+    }
+    size=size+1;
+    int i=size;
+    for(;H[i/2]>val;i/=2){
+        H[i]=H[i/2];
+    }
+    H[i]=val;
+}
