@@ -49,3 +49,4 @@ void insert(int val){
     }
     H[i]=val;
 }
+
