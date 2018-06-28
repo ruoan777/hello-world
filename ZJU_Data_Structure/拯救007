@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#define MaxSize 100
+using namespace std;
+struct crocodiles{
+    float x;
+    float y;
+};
+struct crocodiles cro[MaxSize];
+bool Visited[MaxSize]={false};
+int N,D;//N为鳄鱼个数，D为007每一跳可以跳的最远距离
+
+void Save007();
+bool FirstJump(int i);//告诉我们007第一条从孤岛跳到某个鳄鱼有没有可能
+bool DFS(int i);
+bool isSafe(int i);
+bool Jump(int i,int j);
+
+int main(){
+    int i;
+    cout<<"输入鳄鱼的个数和007每次可以跳跃的距离:"<<endl;
+    cin>>N>>D;
+    cout<<"输入"<<N<<"只鳄鱼的坐标"<<endl;
+    for(i=0;i<N;i++)
+        cin>>cro[i].x>>cro[i].y;
+    Save007();
+    return 0;
+}
+
+/*总体思路:第一跳会对应很多条鳄鱼，每一条鳄鱼对应一个连通集，我们的目的就是遍历每个连通集，看其是否可以到岸边*/
+void Save007(){
+    bool answer=false;
+    for(int i=0;i<N;i++){
+        if(!Visited[i]&&FirstJump(i)){
+            answer=DFS(i);
+            if(answer==true)
+                break;
+        }
+    }
+    if(answer)
+        cout<<"Yes"<<endl;
+    else
+        cout<<"No"<<endl;
+}
+bool FirstJump(int i){
+    float X=cro[i].x;
+    float Y=cro[i].y;
+    float MaxDist=7.5+D;
+    if((X*X+Y*Y)<=MaxDist*MaxDist)
+        return true;
+    else
+        return false;
+}
+bool DFS(int i){
+    Visited[i]=true;
+    bool answer=false;
+    if(isSafe(i))
+        answer=true;
+    else{
+        for(int j=0;j<N;j++){
+            if(!Visited[j] && Jump(i,j)){
+                answer=DFS(j);
+                if(answer)
+                    break;
+            }
+        }
+    }
+    return answer;
+}
+bool isSafe(int i){
+    float X=cro[i].x;
+    float Y=cro[i].y;
+    if(X+D>=50||X-D<=-50||Y+D>=50||Y-D<=-50)
+        return true;
+    else
+        return false;
+}
+bool Jump(int i,int j){
+    float X1=cro[i].x;
+    float Y1=cro[i].y;
+    float X2=cro[j].x;
+    float Y2=cro[j].y;
+    if((X1-X2)*(X1-X2)+(Y1-Y2)*(Y1-Y2)<=D*D)
+        return true;
+    else
+        return false;
+}
+    
