@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <vector>
+#include <queue>
+#define MaxVertexNum 100
+#define INFINITY 65535
+typedef int WeightType;
+typedef int Vertex;
+using namespace std;
+struct GNode{
+    int Nv;
+    int Ne;
+    WeightType G[MaxVertexNum][MaxVertexNum];
+};
+typedef GNode* MGraph;
+struct ENode{
+    Vertex V1;
+    Vertex V2;
+    WeightType weight;
+};
+typedef ENode* Edge;
+MGraph BuildGraph();
+MGraph CreateGraph(int N);
+void Insert(MGraph Graph,Edge Etemp);
+void FindAnimal(MGraph Graph);
+void Floyed(MGraph Graph,WeightType D[][MaxVertexNum]);
+WeightType FindMaxDist(WeightType D[][MaxVertexNum],Vertex i,MGraph Graph);
+int main(){
+    MGraph Graph=BuildGraph();//建好的图除了有边的部分权值为对应权重，其余均为正无穷
+    FindAnimal(Graph);
+    return 0;
+}
+MGraph BuildGraph(){
+    int N,E,i;
+    Edge Etemp;
+    cout<<"输入图的顶点的个数和边的个数:"<<endl;
+    cin>>N>>E;
+    MGraph Graph;
+    Graph=CreateGraph(N);
+    cout<<"输入边:"<<endl;
+    if(E!=0){
+        Etemp=(Edge)malloc(sizeof(ENode));
+        for(i=0;i<E;i++){
+            cin>>Etemp->V1>>Etemp->V2>>Etemp->weight;
+            Etemp->V1--;
+            Etemp->V2--;
+            Insert(Graph,Etemp);
+        }
+    }
+    return Graph;
+}
+MGraph CreateGraph(int N){
+    MGraph Graph;
+    Vertex V,W;
+    Graph=(MGraph)malloc(sizeof(GNode));
+    Graph->Nv=N;
+    Graph->Ne=0;
+    for(V=0;V<N;V++)
+        for(W=0;W<N;W++)
+            Graph->G[V][W]=INFINITY;//这是一个区别，对图用正无穷大的元素进行初始化
+    return Graph;
+}
+void Insert(MGraph Graph,Edge Etemp){
+    Graph->G[Etemp->V1][Etemp->V2]=Etemp->weight;
+    Graph->G[Etemp->V2][Etemp->V1]=Etemp->weight;
+}
+void FindAnimal(MGraph Graph){
+    WeightType D[MaxVertexNum][MaxVertexNum];
+    WeightType MaxDist,MinDist=INFINITY;
+    Vertex i,Animal = 0;
+    Floyed(Graph,D);
+    for(i=0;i<Graph->Nv;i++){
+        MaxDist=FindMaxDist(D,i,Graph);
+        if(MaxDist==INFINITY){
+            cout<<"0"<<endl;
+            return;
+        }
+        if(MaxDist<MinDist){
+            MinDist=MaxDist;
+            Animal=i+1;
+        }
+    }
+    cout<<Animal<<" "<<MinDist<<endl;
+}
+void Floyed(MGraph Graph,WeightType D[][MaxVertexNum]){
+    Vertex i,j,k;
+    for(i=0;i<Graph->Nv;i++)
+        for(j=0;j<Graph->Nv;j++)
+            D[i][j]=Graph->G[i][j];
+    for(k=0;k<Graph->Nv;k++)
+        for(i=0;i<Graph->Nv;i++)
+            for(j=0;j<Graph->Nv;j++)
+                if(D[i][k]+D[k][j]<D[i][j])
+                    D[i][j]=D[i][k]+D[k][j];
+}
+WeightType FindMaxDist(WeightType D[][MaxVertexNum],Vertex i,MGraph Graph){
+    WeightType MaxDist=0;
+    Vertex j;
+    for(j=0;j<Graph->Nv;j++)
+        if(i!=j&&D[i][j]>MaxDist)
+            MaxDist=D[i][j];
+    return MaxDist;
+}
