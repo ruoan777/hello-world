@@ -1,0 +1,128 @@
+#include <iostream>
+#include <string>
+#define MaxVertexNum 500
+#define INFINITY 65535
+typedef int WeightType;
+typedef int Vertex;
+using namespace std;
+//邻接矩阵建立图
+struct Graph{
+    int Nv;
+    int Ne;
+    WeightType DIST[MaxVertexNum][MaxVertexNum];
+    WeightType COST[MaxVertexNum][MaxVertexNum];
+};
+typedef struct Graph* MGraph;
+
+struct ENode{
+    Vertex V1;
+    Vertex V2;
+    WeightType Dist;
+    WeightType Cost;
+};
+typedef struct ENode* EDGE;
+
+MGraph BuildGraph(int N,int M);
+MGraph CreateGraph(int N,int M);
+void Insert(MGraph Graph,EDGE edge);
+void Dijkstra(MGraph Graph,Vertex S,Vertex D);
+Vertex FindMinDist(MGraph Graph,WeightType dist[],bool visited[]);
+int main(){
+    MGraph Graph;
+    int N,M,S,D;
+    cin>>N>>M>>S>>D;
+    //N为城市个数即图的节点个数,M是高速公路的条数,S是出发地的城市编号,D是目的地的城市编号
+    Graph=BuildGraph(N,M);
+    Dijkstra(Graph,S,D);
+    return 0;
+}
+MGraph BuildGraph(int N,int M){
+    MGraph Graph;
+    Graph=CreateGraph(N,M);
+    cout<<"输入城市1、城市2、高速公路长度、收费额这四个数据，空格隔开"<<endl;
+    while(M){
+        EDGE edge;
+        edge=(EDGE)malloc(sizeof(struct ENode));
+        cin>>edge->V1>>edge->V2>>edge->Dist>>edge->Cost;
+        Insert(Graph,edge);
+        M--;
+    }
+    return Graph;
+}
+MGraph CreateGraph(int N,int M){
+    MGraph Graph;
+    Vertex V,W;
+    Graph=(MGraph)malloc(sizeof(struct Graph));
+    Graph->Nv=N;
+    Graph->Ne=M;
+    for(V=0;V<N;V++){
+        for(W=0;W<N;W++){
+            Graph->DIST[V][W]=INFINITY;
+            Graph->COST[V][W]=INFINITY;
+        }
+    }
+    return Graph;
+}
+void Insert(MGraph Graph,EDGE edge){
+    Graph->DIST[edge->V1][edge->V2]=edge->Dist;
+    Graph->DIST[edge->V2][edge->V1]=edge->Dist;
+    Graph->COST[edge->V1][edge->V2]=edge->Cost;
+    Graph->COST[edge->V2][edge->V1]=edge->Cost;
+}
+void Dijkstra(MGraph Graph,Vertex S,Vertex D){
+    bool *visited=new bool[Graph->Nv];
+    WeightType *dist=new WeightType[Graph->Nv];
+    Vertex *path=new Vertex[Graph->Nv];
+    WeightType *cost=new WeightType[Graph->Nv];
+    /* 初始化：此处默认邻接矩阵中不存在的边用INFINITY表示 */
+    Vertex V,W;
+    for(V=0;V<Graph->Nv;V++){
+        dist[V]=Graph->DIST[S][V];
+        cost[V]=Graph->COST[S][V];
+        if(dist[V]<INFINITY)
+            path[V]=S;
+        else
+            path[V]=-1;
+        visited[V]=false;
+    }
+    dist[S]=0;
+    visited[S]=true;
+    while(1){
+        V=FindMinDist(Graph,dist,visited);
+        if(V==-1)
+            break;
+        visited[V]=true;
+        for(W=0;W<Graph->Nv;W++){
+            if(!visited[W] && (Graph->DIST[V][W])<INFINITY){
+            //W未被收录且是V的邻接点
+                if(dist[W]>dist[V]+Graph->DIST[V][W]){
+                    dist[W]=dist[V]+Graph->DIST[V][W];
+                    path[W]=V;
+                    cost[W]=cost[V]+Graph->COST[V][W];
+                }else if(dist[W]==dist[V]+Graph->DIST[V][W]&&\
+                         cost[W]>cost[V]+Graph->COST[V][W]){
+                    cost[W]=cost[V]+Graph->COST[V][W];
+                }
+            }//end first if
+        }//end for
+    }//end while
+    cout<<dist[D]<<" "<<cost[D]<<endl;
+    delete[] visited;
+    delete[] dist;
+    delete[] path;
+    delete[] cost;
+}
+Vertex FindMinDist(MGraph Graph,WeightType dist[],bool visited[]){
+    Vertex MinV, V;
+    int MinDist=INFINITY;
+    for(V=0;V<Graph->Nv;V++){
+        if(!visited[V]&&dist[V]<MinDist){
+            MinDist=dist[V];
+            MinV=V;
+        }
+    }
+    if(MinDist==INFINITY){
+        MinV=-1;
+    }
+    return MinV;
+}
