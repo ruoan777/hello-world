@@ -1,0 +1,132 @@
+#include <iostream>
+#include <string>
+#include <stack>
+#define MaxVertexNum 1000
+#define INFINITY 65535
+typedef int WeightType;
+typedef int Vertex;
+using namespace std;
+//邻接矩阵建立图
+struct Graph{
+    int Nv;
+    int Ne;
+    WeightType COST[MaxVertexNum][MaxVertexNum];
+};
+typedef struct Graph* MGraph;
+
+struct ENode{
+    Vertex V1;
+    Vertex V2;
+    WeightType Cost;
+};
+typedef struct ENode* EDGE;
+MGraph BuildGraph();
+MGraph CreateGraph(int N,int M);
+void Insert(MGraph Graph,EDGE edge);
+WeightType Prim(MGraph Graph);
+Vertex FindMinVertexInCost(MGraph Graph,WeightType cost[]);
+int main(){
+    MGraph Graph;
+    Graph=BuildGraph();
+    WeightType cost=Prim(Graph);
+    cout<<cost<<endl;
+    return 0;
+}
+MGraph BuildGraph(){
+    MGraph Graph;
+    int N,M;
+    cout<<"输入城市个数，候选道路数目"<<endl;
+    cin>>N>>M;
+    //N为城市个数即图的节点个数,M是候选道路数目
+    Graph=CreateGraph(N,M);
+    cout<<"输入城市1、城市2、道路花费这三个数据，空格隔开"<<endl;
+    /*注意：城镇从1到N编号*/
+    while(M){
+        EDGE edge;
+        edge=(EDGE)malloc(sizeof(struct ENode));
+        cin>>edge->V1>>edge->V2>>edge->Cost;
+        edge->V1--;
+        edge->V2--;
+        Insert(Graph,edge);
+        M--;
+    }
+    return Graph;
+}
+MGraph CreateGraph(int N,int M){
+    MGraph Graph=(MGraph)malloc(sizeof(struct Graph));
+    Vertex V,W;
+    Graph->Nv=N;
+    Graph->Ne=M;
+    for(V=0;V<N;V++){
+        for(W=0;W<N;W++){
+            Graph->COST[V][W]=INFINITY;
+        }
+    }
+    return Graph;
+}
+void Insert(MGraph Graph,EDGE edge){
+    Graph->COST[edge->V1][edge->V2]=edge->Cost;
+    Graph->COST[edge->V2][edge->V1]=edge->Cost;
+}
+WeightType Prim(MGraph Graph){
+    int N=Graph->Nv;
+    WeightType *cost=new WeightType[N];
+    Vertex *path=new Vertex[N];
+    Vertex V,W;
+    /*初始化*/
+    /*与Dijkstra算法不同之处在于，此例子里面，可以不用额外创建visited数组，用cost[V]是否等于0即可判断一个节点是否被访问过*/
+    Vertex S=0;
+    cost[S]=0;
+    path[S]=-1;
+    for(V=0;V<N;V++){
+        if(V!=S){
+            cost[V]=Graph->COST[S][V];
+            if(cost[V]!=INFINITY)
+                path[V]=S;
+            else
+                path[V]=-1;
+        }
+    }
+    WeightType resCost=0;
+    while(1){
+        V=FindMinVertexInCost(Graph,cost);
+        if(V==-1)
+            break;
+        resCost+=cost[V];
+        cost[V]=0;
+        for(W=0;W<N;W++){//begin for
+            if(cost[W]!=0 && Graph->COST[V][W]!=INFINITY){
+                //W未被收录且是V的邻接点
+                //其实可以用cost[W]==0来判断是否访问过
+                if(cost[W]>cost[V]+Graph->COST[V][W]){
+                    cost[W]=cost[V]+Graph->COST[V][W];
+                    path[W]=V;
+                }
+            }
+        }//end for
+    }//end while
+    int count=0;
+    for(W=0;W<N;W++){
+        if(cost[W]==0)
+            count++;
+    }
+    if(count<N){
+        cout<<"输入数据不足以保证畅通，则输出−1，表示需要建设更多公路。"<<endl;
+        resCost=-1;
+    }
+    delete[] path;
+    delete[] cost;
+    return resCost;
+}
+Vertex FindMinVertexInCost(MGraph Graph,WeightType cost[]){
+    Vertex V;
+    Vertex VerMin=-1;
+    WeightType MinCost=INFINITY;
+    for(V=0;V<Graph->Nv;V++){
+        if(cost[V]!=0 && cost[V]<MinCost){
+            MinCost=cost[V];
+            VerMin=V;
+        }
+    }
+    return VerMin;
+}
