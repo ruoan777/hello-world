@@ -1,0 +1,216 @@
+#include <iostream>
+#include <string>
+#include <stack>
+#include <queue>
+#define MaxVertexNum 100
+#define MaxQueue 100
+#define INFINITY 65535
+typedef int WeightType;
+typedef int Vertex;
+using namespace std;
+
+/*邻接表建立图*/
+
+//邻接点
+typedef struct AdjVNode *PtrToAdjVNode;
+struct AdjVNode{
+    Vertex AdjV; /* 邻接点下标 */
+    WeightType Weight; /* 边权重 */
+    PtrToAdjVNode Next;
+};
+
+//顶点
+typedef struct VNode{
+    PtrToAdjVNode FirstEdge;
+}AdjList[MaxVertexNum];
+/*AdjList是邻接表类型,经过typedef后，AdjList等价于定义了一个结构体数组*/
+
+//图
+typedef struct GNode *PtrToGNode;
+struct GNode{
+    int Nv;
+    int Ne;
+    AdjList G;
+};
+typedef PtrToGNode LGraph;
+
+//边
+typedef struct ENode *PtrToENode;
+struct ENode{
+    Vertex V1, V2;
+    WeightType Weight;
+};
+typedef PtrToENode Edge;
+
+//队列
+struct QNode {
+    Vertex *Data;
+    int rear;
+    int front;
+};
+typedef struct QNode *Queue;
+
+//自定义函数的声明
+LGraph BuildGraph();
+LGraph CreateGraph(int Nv);
+void InsertEdge(LGraph Graph,Edge E);
+bool TopSort(LGraph Graph, Vertex TopOrder[],WeightType Earliest[]);
+void AddQ(Queue Q,Vertex V);
+bool IsEmptyQ(Queue Q);
+Vertex DeleteQ(Queue Q);
+bool IsFull(Queue Q);
+Queue CreateQueue(int N);
+
+Queue CreateQueue(int N){
+    Queue Q=(Queue)malloc(sizeof(QNode));
+    Q->Data=(Vertex*)malloc(N*sizeof(Vertex));
+    Q->front=Q->rear=0;
+    return Q;
+}
+void AddQ(Queue Q,Vertex V){
+    if(IsFull(Q))
+        cout<<"队列已满"<<endl;
+    else{
+        Q->rear =(Q->rear+1)%MaxQueue;
+        Q->Data[Q->rear]=V;
+    }
+}
+bool IsFull(Queue Q){
+    if((Q->rear+1)%MaxQueue==Q->front)
+        return true;
+    else
+        return false;
+}
+bool IsEmptyQ(Queue Q){
+    if(Q->rear==Q->front)
+        return true;
+    else
+        return false;
+}
+Vertex DeleteQ(Queue Q){
+    if(IsEmptyQ(Q)){
+        cout<<"Queue Empty"<<endl;
+        return -1;
+    }
+    Q->front=(Q->front+1)%MaxQueue;
+    return Q->Data[Q->front];
+}
+LGraph BuildGraph(){
+    Vertex V;
+    int Nv;
+    cout<<"输入节点数，边的个数"<<endl;
+    cin>>Nv;
+    //N为城市个数即图的节点个数,M是候选道路数目
+    LGraph Graph=CreateGraph(Nv);
+    cout<<"输入城市1、城市2、道路花费这三个数据，空格隔开"<<endl;
+    /*注意：城镇从1到N编号*/
+    cin>>Graph->Ne;
+    if(Graph->Ne!=0){
+        Edge E=(Edge)malloc(sizeof(ENode));
+        for(V=0;V<Graph->Ne;V++){
+            cin>>E->V1>>E->V2>>E->Weight;
+            E->V1--;E->V2--;
+            InsertEdge(Graph,E);
+        }
+    }
+    return Graph;
+}
+LGraph CreateGraph(int Nv){
+    Vertex V;
+    LGraph Graph;
+    Graph=(LGraph)malloc(sizeof(GNode));
+    Graph->Nv=Nv;
+    Graph->Ne=0;
+    for(V=0;V<Graph->Nv;V++)
+        Graph->G[V].FirstEdge=NULL;
+    return Graph;
+}
+void InsertEdge(LGraph Graph,Edge E){
+    PtrToAdjVNode NewNode;
+    /* 为V2建立新的邻接点 */
+    NewNode=(PtrToAdjVNode)malloc(sizeof(AdjVNode));
+    NewNode->AdjV=E->V2;
+    NewNode->Weight=E->Weight;
+    /* 将V2插入V1的表头 */
+    NewNode->Next=Graph->G[E->V1].FirstEdge;
+    Graph->G[E->V1].FirstEdge=NewNode;
+    //此题是有向图，就不用插入反方向的边了
+}
+void PrintGraph(LGraph Graph){
+    Vertex V;
+    PtrToAdjVNode W;
+    for(V=0;V<Graph->Nv;V++){
+        cout<<V<<"->";
+        for(W=Graph->G[V].FirstEdge;W;W=W->Next){
+            cout<<W->AdjV<<","<<W->Weight<<" ";
+        }
+        cout<<endl;
+    }
+}
+bool TopSort(LGraph Graph, Vertex TopOrder[],Vertex Earliest[]){
+    Vertex V;
+    PtrToAdjVNode W;
+    int *Indegree=new int[Graph->Nv];
+    WeightType *MAXEAR=new WeightType[Graph->Nv];
+    //int Indegree[MaxVertexNum];
+    Queue Q=CreateQueue(MaxVertexNum);
+    /* 初始化Indegree[] */
+    for (V=0; V<Graph->Nv; V++){
+        Indegree[V] = 0;
+        Earliest[V] = 0;
+    }
+    for(WeightType M=0;M<Graph->Nv;M++)
+        MAXEAR[M]=0;
+    /* 遍历图，得到Indegree[] */
+    for(V=0;V<Graph->Nv;V++)
+        for(W=Graph->G[V].FirstEdge;W;W=W->Next)
+            Indegree[W->AdjV]++;/* 对有向边<V, W->AdjV>累计终点的入度 */
+    /* 将所有入度为0的顶点入列 */
+    for(V=0;V<Graph->Nv;V++)
+        if(Indegree[V]==0){
+            AddQ(Q,V);
+        }
+    /*下面进入拓扑排序*/
+    int cnt = 0;
+    while(!IsEmptyQ(Q)){
+        V = DeleteQ(Q);
+        TopOrder[cnt++]=V;
+        /* 对V的每个邻接点W->AdjV */
+        for(W=Graph->G[V].FirstEdge;W;W=W->Next){
+            if(Earliest[V] + W->Weight>MAXEAR[W->AdjV])
+                MAXEAR[W->AdjV]=Earliest[V] + W->Weight;
+            if (--Indegree[W->AdjV] == 0 ){/* 若删除V使得W->AdjV入度为0 */
+                AddQ(Q, W->AdjV); /* 则该顶点入列 */
+                if((Earliest[V] + W->Weight)> MAXEAR[W->AdjV])
+                    Earliest[W->AdjV] = Earliest[V] + W->Weight;
+                else
+                    Earliest[W->AdjV]=MAXEAR[W->AdjV];
+            }
+        }
+    }
+    delete [] Indegree;
+    delete [] MAXEAR;
+    if(cnt!=Graph->Nv)
+         return false; /* 说明图中有回路, 返回不成功标志 */
+    else
+        return true;
+}
+int main(){
+    LGraph Graph;
+    WeightType Earliest[MaxVertexNum];
+    Vertex TopOrder[MaxVertexNum];
+    Graph=BuildGraph();
+    //PrintGraph(Graph);
+    bool ret=TopSort(Graph,TopOrder,Earliest);
+    if(ret == false)
+        cout<<0<<endl;
+    else{
+        int max = Earliest[0];
+        for(int i=0;i<Graph->Nv;i++){
+            if(max<Earliest[i])
+                max=Earliest[i];
+        }
+        cout<<max<<endl;
+    }
+    return 0;
+}
