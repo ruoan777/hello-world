@@ -109,7 +109,7 @@ LGraph BuildGraph(){
         Edge E=(Edge)malloc(sizeof(ENode));
         for(V=0;V<Graph->Ne;V++){
             cin>>E->V1>>E->V2>>E->Weight;
-            E->V1--;E->V2--;
+            //E->V1--;E->V2--;
             InsertEdge(Graph,E);
         }
     }
