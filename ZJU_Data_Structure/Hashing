@@ -1,0 +1,106 @@
+#include<iostream>
+#include "math.h"
+using namespace std;
+#define MAXTABLESIZE 10000
+typedef int ElementType;
+typedef int Index;
+typedef Index Position;
+typedef enum { Legitimate, Empty, Deleted } EntryType;
+int printflag=0;
+typedef struct HashEntry Cell; /* 散列表单元类型 */
+struct HashEntry{
+    ElementType Data; /* 存放元素 */
+    EntryType Info;   /* 单元状态 */
+};
+
+typedef struct HashTbl *HashTable;
+struct HashTbl{
+    int TableSize;
+    Cell *TheCells;
+};
+
+Position Find(HashTable H,ElementType key);
+int NextPrime(int N){
+    int i,p;
+    p=(N%2)?N:N+1;
+    while(p<=MAXTABLESIZE){
+        for(i=(int)sqrt(p);i>2;i--)
+            if(!(p%i))
+                break;/* p不是素数 */
+        if(i==2)
+                break;
+        else p+=2;
+    }
+    return p;
+}
+int Hash(int key,int N){
+    return key%N;
+}
+Position Find(HashTable H,ElementType key){
+    Position NewPos;//不断通过二次探测解决冲突
+    Index CurrentPos;//通过hash直接计算得到的地址
+    int ConflictNum=0; /* 记录冲突次数 */
+    CurrentPos=Hash(key,H->TableSize);
+    NewPos=CurrentPos;
+    while(H->TheCells[NewPos].Info!=Empty && ConflictNum<=(H->TableSize/2)){
+        ConflictNum++;
+        NewPos=(CurrentPos+ConflictNum*ConflictNum)%H->TableSize; /* 增量为[+ConflictNum^2]*/
+    }
+    if(ConflictNum>(H->TableSize/2))
+        return -1;
+    else
+        return NewPos;
+}
+void Insert(HashTable H,ElementType key){
+    Position Pos=Find(H,key);
+    if(printflag==0){
+        if(Pos!=-1){ /* 如果这个单元没有被占，说明Key可以插入在此 */
+        H->TheCells[Pos].Info = Legitimate;
+        H->TheCells[Pos].Data = key;
+        cout<<Pos;
+        }
+        else
+            cout<<"-";
+        printflag=1;
+    }
+    else{
+        if(Pos!=-1){ /* 如果这个单元没有被占，说明Key可以插入在此 */
+            H->TheCells[Pos].Info = Legitimate;
+            H->TheCells[Pos].Data = key;
+            cout<<" "<<Pos;
+        }
+        else
+            cout<<" "<<"-";
+    }
+}
+HashTable CreateHashTable(int MSize){
+    int i;
+    HashTable H=(HashTable)malloc(sizeof(HashTbl));
+    H->TableSize=NextPrime(MSize);
+    H->TheCells=(Cell*)malloc(H->TableSize*sizeof(Cell));
+    for(i=0;i<H->TableSize;i++){
+        H->TheCells[i].Data=0;
+        H->TheCells[i].Info=Empty;
+    }
+    return H;
+}
+void DestroyTable(HashTable H){
+    free(H->TheCells);
+    free(H);
+}
+int main(){
+    HashTable H;
+    int MSize,i,N;
+    ElementType numbers;
+    cout<<NextPrime(457)<<endl;
+    cin>>MSize>>N;
+    
+    H=CreateHashTable(MSize);
+    for(i=0;i<N;i++){
+        cin>>numbers;
+        Insert(H,numbers);
+    }
+    cout<<endl;
+    DestroyTable(H);
+    return 0;
+}
