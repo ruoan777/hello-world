@@ -123,7 +123,7 @@ void ScanAndOutput(HashTable H){
     }
     cout<<MinPhone<<" "<<MaxCnt<<endl;
     if(SameCnt>1)
-        cout<<SameCnt<<endl;
+        cout<<" "<<SameCnt<<endl;
 }
 int main(){
     HashTable H;
