@@ -1,0 +1,92 @@
+% !TEX TS-program = xelatex
+% !TEX encoding = UTF-8 Unicode
+% !Mode:: "TeX:UTF-8"
+
+\documentclass{resume}
+\usepackage{zh_CN-Adobefonts_external} % Simplified Chinese Support using external fonts (./fonts/zh_CN-Adobe/)
+% \usepackage{NotoSansSC_external}
+% \usepackage{NotoSerifCJKsc_external}
+% \usepackage{zh_CN-Adobefonts_internal} % Simplified Chinese Support using system fonts
+\usepackage{linespacing_fix} % disable extra space before next section
+\usepackage{cite}
+
+\begin{document}
+\pagenumbering{gobble} % suppress displaying page number
+
+\name{高新海}
+\basicInfo{
+  \faInfo{男}\textperiodcentered\
+  \birth{1995.10} \textperiodcentered\ 
+  \email{ruoan777@gmail.com} \textperiodcentered\ 
+  \phone{(+86) 188-1753-7268}
+  %\linkedin{Shang Hai}
+  %\datedsubsection{\phone: 男} \textperiodcentered\ {出生年月: 1995.10}
+}
+% increase linespacing [parsep=0.5ex]
+\textbf{求职意向:软件开发}
+
+\section{\faGraduationCap\  教育背景}
+\datedsubsection{\textbf{中国科学院大学}, 上海}{2016 -- 至今}
+\textit{在读硕士研究生}\ 电子与通信工程，预计 2019 年 6 月毕业
+\datedsubsection{\textbf{中国科学技术大学}, 合肥\textperiodcentered\ 安徽}{2012 -- 2016}
+\textit{学士}\ 电子信息科学与技术
+
+\section{\faUsers\ 学术经历}
+\datedsubsection{\textbf{膀胱癌疾病-基因优先化研究} }{2015年8月 -- 2016年3月}
+\textbf{大学生研究计划} \textit{中国科大}\textperiodcentered\ \textit{合肥}
+\begin{itemize}
+  \item 利用现有的癌症疾病数据库
+  \item 采用基于异构网络的方法整合多组学数据
+  \item 采用随机游走算法探索膀胱癌的潜在致病基因
+  \item 预测准确率比现有基于单组学方法高出5\%到15\%
+\end{itemize}
+
+\datedsubsection{\textbf{分布式科学上网姿势}}{2014年6月 -- 至今}
+\role{Golang, Linux}{个人项目，和富帅糕合作开发}
+\begin{onehalfspacing}
+分布式负载均衡科学上网姿势, https://github.com/cyfdecyf/cow
+\begin{itemize}
+  \item 修复了连接未正常关闭导致文件描述符耗尽的 bug
+  \item 使用Chord 哈希 URL, 实现稳定可靠地分流
+  \item xxx (尽量使用量化的客观结果)
+\end{itemize}
+\end{onehalfspacing}
+
+
+% Reference Test
+%\datedsubsection{\textbf{Paper Title\cite{zaharia2012resilient}}}{May. 2015}
+%An xxx optimized for xxx\cite{verma2015large}
+%\begin{itemize}
+%  \item main contribution
+%\end{itemize}
+\section{\faCogs\ 技能}
+% increase linespacing [parsep=0.5ex]
+\begin{itemize}[parsep=0.5ex]
+  \item 编程: C > C++ = Matlab >Python
+  \item 英语: CET-6
+  \item 熟悉机器学习常用算法，了解深度学习基本理论
+  \item 其他:了解Mysql，Latex等
+\end{itemize}
+
+\section{\faHeartO\ 校园经历}
+
+\datedsubsection{\textbf{上海交通大学}}{2014年6月 -- 2014年8月}
+\textbf{C9高校暑期交流} \textit{上海}
+
+\datedsubsection{\textbf{中国科大信息学院学生会} }{2013年6月 -- 2014年6月}
+\textbf{科技部副部长} \textit{合肥}
+\begin{itemize}
+  \item 组织策划的"无线电测向"活动，被评为当年度校级优秀活动。
+  \item 负责信息学院学生会其他日常活动，被评为年度优秀团员。
+\end{itemize}
+
+
+\section{\faInfo\ 其他}
+% increase linespacing [parsep=0.5ex]
+\textbf{自我评价：爱折腾，肯折腾，会折腾。}
+
+%% Reference
+%\newpage
+%\bibliographystyle{IEEETran}
+%\bibliography{mycite}
+\end{document}
