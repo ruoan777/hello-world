@@ -1,0 +1,79 @@
+#include<iostream>
+#include<queue>
+#define MaxTree 10
+#define Null -1
+typedef int Tree;
+typedef char ElementType;
+using namespace std;
+struct TNode{
+    int data;
+    Tree left;
+    Tree right;
+}T[MaxTree];
+Tree BuildTree(TNode T[]);
+void ListLeaves(Tree Root);
+
+Tree BuildTree(TNode T[]){
+    int N,i;
+    ElementType TreeLeft,TreeRight;
+    Tree TreeRoot=Null;
+    cin>>N;//树的节点个数
+    if(N){
+        int *FindTreeRoot=new int[N]();
+        for(i=0;i<N;i++){
+            cin>>TreeLeft>>TreeRight;
+            T[i].data=i;
+            if(TreeLeft!='-'){
+                T[i].left=TreeLeft-'0';
+                FindTreeRoot[T[i].left]=1;
+            }
+            else
+                T[i].left=Null;
+            if(TreeRight!='-'){
+                T[i].right=TreeRight-'0';
+                FindTreeRoot[T[i].right]=1;
+            }
+            else
+                T[i].right=Null;
+        }
+        for(i=0;i<N;i++){
+            if(FindTreeRoot[i]==0)
+                TreeRoot=i;
+        }
+        delete [] FindTreeRoot;
+    }
+    else
+        return Null;
+    return TreeRoot;
+}
+void ListLeaves (Tree Root){
+    int printflag=0;//控制输出的格式，使得第一次不打印空格，后面每次都是先打空格再跟一个节点
+    queue<int> Q;
+    Tree TreeIndex;
+    if (Root == Null)
+        return; /* 若是空树则直接返回 */
+    Q.push(Root);
+    while (!Q.empty()){
+        TreeIndex=Q.front();
+        Q.pop();
+        if(T[TreeIndex].left==Null && T[TreeIndex].right==Null){
+            if(printflag==0){
+                cout<<T[TreeIndex].data;
+                printflag=1;
+            }
+            else
+                cout<<" "<<T[TreeIndex].data;
+        }
+        if (T[TreeIndex].left!=Null)
+            Q.push(T[TreeIndex].left);
+        if (T[TreeIndex].right!=Null)
+            Q.push(T[TreeIndex].right);
+    }
+}
+int main(){
+    Tree Root;
+    Root=BuildTree(T);//输入结构数组表示的静态二叉树，输出树的下标节点
+    ListLeaves(Root);//本质上是一个层次遍历
+    return 0;
+}
+
