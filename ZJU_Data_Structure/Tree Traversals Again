@@ -1,0 +1,91 @@
+//前序与中序重建二叉树并后序遍历，但是对于有相同值的节点会报错
+//https://www.nowcoder.com/pat/1/problem/4314 
+#include<iostream>
+#include<string>
+#include<vector>
+#include<stack>
+#include <sstream>
+#define Null -1
+using namespace std;
+typedef struct TreeNode* Tree;
+struct TreeNode{
+    int val;
+    Tree left;
+    Tree right;
+    TreeNode(int x): val(x), left(NULL), right(NULL) {}
+};
+int printflag=0;
+Tree BuildTree();
+Tree buildTreeFromInAndPre(vector<int>& preorder, vector<int>& inorder);
+Tree buildTreeCore(vector<int>& preorder,int startpre,int endpre,vector<int>& inorder,int startin,int endin);
+
+Tree BuildTree(){
+    Tree root;
+    int N,i,Front;
+    vector<int> pre,in;
+    stack<int> temp;
+    cin>>N;
+    string input;
+    if(N){
+        for(i=0;i<2*N;i++){
+            cin>>input;
+            if(input == "Push"){
+                cin>>Front;
+                pre.push_back(Front);
+                temp.push(Front);
+            }
+            else if(input == "Pop"){
+                Front=temp.top();
+                temp.pop();
+                in.push_back(Front);
+            }
+        }
+    }
+//    for(int i=0;i<N;i++){
+//        cout<<pre[i]<<" ";
+//    }
+//    cout<<endl;
+//    for(int i=0;i<N;i++){
+//        cout<<in[i]<<" ";
+//    }
+//    cout<<endl;
+    root=buildTreeFromInAndPre(pre,in);
+    return root;
+}
+Tree buildTreeFromInAndPre(vector<int>& preorder, vector<int>& inorder) {
+    if(preorder.empty()||inorder.empty())
+        return nullptr;
+    return buildTreeCore(preorder,0,preorder.size()-1,inorder,0,inorder.size()-1);
+}
+Tree buildTreeCore(vector<int>& preorder,int startpre,int endpre,vector<int>& inorder,int startin,int endin){
+    Tree root=new TreeNode(preorder[startpre]);
+    if(startin>endin || startpre>endpre)
+        return nullptr;
+    for(int i=startin;i<=endin;i++){
+        if(inorder[i]==preorder[startpre]){
+            root->left=buildTreeCore(preorder,startpre+1,startpre+i-startin,inorder,startin,i-1);
+            root->right=buildTreeCore(preorder,startpre+i-startin+1,endpre,inorder,i+1,endin);
+            break;
+        }
+    }
+    return root;
+}
+void postorder(Tree root){
+    if(root){
+        postorder(root->left);
+        postorder(root->right);
+        if(printflag==0){
+            cout<<root->val;
+            printflag=1;
+        }
+        else
+            cout<<" "<<root->val;
+    }
+}
+int main(){
+    Tree root;
+    root=BuildTree();
+    postorder(root);
+    return 0;
+}
+
