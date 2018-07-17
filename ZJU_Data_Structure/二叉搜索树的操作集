@@ -1,6 +1,18 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
+/*注意：
+插入和删除操作都使用了递归，而且是带有返回值的递归，故要把结果添加到对应的左子树或者右子树中去，如：
+BST->Left=Insert(BST->Left,X);
+BST->Left=Delete(BST->Left,temp->Data);
+
+另外，delete操作中要注意，如果第一个if中不带返回，编译器会报错，因为进入了空指针的data.
+
+    if(BST==NULL){
+        printf("Not Found\n");
+        return BST;
+    }
+    if((BST->Data)>X)
+        BST->Left=Delete(BST->Left, X);
+*/
+#include<iostream>
 using namespace std;
 typedef int ElementType;
 typedef struct TNode *Position;
@@ -33,7 +45,6 @@ int main()
         BST = Insert(BST, X);
     }
     printf("Preorder:"); PreorderTraversal(BST); printf("\n");
-     printf("Inorder:"); InorderTraversal(BST); printf("\n");
     MinP = FindMin(BST);
     MaxP = FindMax(BST);
     scanf("%d", &N);
@@ -52,94 +63,89 @@ int main()
         scanf("%d", &X);
         BST = Delete(BST, X);
     }
-    printf("Preorder:");PreorderTraversal(BST);cout<<endl;
     printf("Inorder:"); InorderTraversal(BST); printf("\n");
     
     return 0;
 }
-BinTree Insert( BinTree BST, ElementType X ){
-    if(BST==nullptr){
-        BST=(BinTree)malloc(sizeof(TNode));
-        BST->Data=X;
-        BST->Left=nullptr;
-        BST->Right=nullptr;
-    }else{
-        if(BST->Data>X)
-            BST->Left=Insert(BST->Left,X);
-        else if(BST->Data<X)
-            BST->Right=Insert(BST->Right,X);
-    }
-    return BST;
-}
-BinTree Delete( BinTree BST, ElementType X ){
-        BinTree temp;
-        if (BST == NULL)
-            printf("Not Found\n");
-        else
-        {
-            if (X < BST->Data)
-                BST->Left = Delete(BST->Left, X);
-            else if (X > BST->Data)
-                BST->Right = Delete(BST->Right, X);
-            else
-            {
-                if (BST->Left && BST->Right)
-                {
-                    temp = FindMin(BST->Right);
-                    BST->Data = temp->Data;
-                    BST->Right = Delete(BST->Right, temp->Data);
-                }
-                else
-                {
-                    temp = BST;
-                    if (BST->Left == NULL)
-                        BST = BST->Right;
-                    else if (BST->Right == NULL)
-                        BST = BST->Left;
-                    free(temp);
-                }
-            }
-        }
-        return BST;
-}
-Position Find( BinTree BST, ElementType X ){
-    if(BST==nullptr)
-        return BST;
-    while(BST){
-        if(BST->Data==X)
-            break;
-        else if(BST->Data>X)
-            BST=BST->Left;
-        else
-            BST=BST->Right;
-    }
-    return BST;
-}
-Position FindMin( BinTree BST ){
-    if(BST){
-        while(BST->Left)
-            BST=BST->Left;
-    }
-    return BST;
-}
-Position FindMax( BinTree BST ){
-    if(BST){
-        while(BST->Right)
-            BST=BST->Right;
-    }
-    return BST;
-}
-void PreorderTraversal( BinTree BT ){
+/* 你的代码将被嵌在这里 */
+void PreorderTraversal( BinTree BT ){ /* 先序遍历，由裁判实现，细节不表 */
     if(BT){
         cout<<BT->Data<<" ";
         PreorderTraversal(BT->Left);
         PreorderTraversal(BT->Right);
     }
 }
-void InorderTraversal( BinTree BT ){
+void InorderTraversal( BinTree BT ){  /* 中序遍历，由裁判实现，细节不表 */
     if(BT){
         InorderTraversal(BT->Left);
         cout<<BT->Data<<" ";
         InorderTraversal(BT->Right);
     }
+}
+
+Position Find( BinTree BST, ElementType X ){
+    while(BST){
+        if(BST->Data>X)
+            BST=BST->Left;
+        else if(BST->Data<X)
+            BST=BST->Right;
+        else
+            break;
+    }
+    return BST;
+}
+Position FindMin( BinTree BST ){
+    if(!BST)
+        return BST;
+    while(BST->Left){
+        BST=BST->Left;
+    }
+    return BST;
+}
+Position FindMax( BinTree BST ){
+    if(!BST)
+        return BST;
+    while(BST->Right)
+        BST=BST->Right;
+    return BST;
+}
+BinTree Insert( BinTree BST, ElementType X ){
+    if(BST==NULL){
+        BST=(BinTree)malloc(sizeof(struct TNode));
+        BST->Data=X;
+        BST->Left=NULL;
+        BST->Right=NULL;
+    }
+    if(BST->Data>X)
+        BST->Left=Insert(BST->Left,X);
+    else if(BST->Data<X)
+        BST->Right=Insert(BST->Right,X);
+    return BST;
+}
+BinTree Delete(BinTree BST,ElementType X){
+    if(BST==NULL){
+        printf("Not Found\n");
+        return BST;
+    }
+    if((BST->Data)>X)
+        BST->Left=Delete(BST->Left, X);
+    else if((BST->Data)<X)
+        BST->Right=Delete(BST->Right, X);
+    else{
+        Position temp;
+        if(BST->Left && BST->Right){
+            temp=FindMax(BST->Left);
+            BST->Data=temp->Data;
+            BST->Left=Delete(BST->Left,temp->Data);
+        }
+        else{
+            temp=BST;
+            if(!BST->Left)
+                BST=BST->Right;
+            else if(!BST->Right)
+                BST=BST->Left;
+            free(temp);
+        }
+    }
+    return BST;
 }
