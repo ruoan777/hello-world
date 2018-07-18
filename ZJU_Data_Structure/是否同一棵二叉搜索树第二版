@@ -1,0 +1,105 @@
+#include<iostream>
+using namespace std;
+typedef int ElementType;
+typedef struct TreeNode *Tree;
+struct TreeNode{
+    ElementType Data;
+    Tree Left;
+    Tree Right;
+    int flag;
+};
+Tree Insert(Tree BST,ElementType X);
+Tree MakeTree(int N);
+void Reset(Tree T);
+void freeTree(Tree T);
+bool Judge(Tree T,int N);
+bool check(Tree T,ElementType data);
+
+Tree MakeTree(int N){
+    int i;
+    ElementType data;
+    Tree SearchTree=NULL;
+    for(i=0;i<N;i++){
+        cin>>data;
+        SearchTree=Insert(SearchTree,data);
+    }
+    return SearchTree;
+}
+Tree Insert( Tree BST, ElementType X ){
+    if(BST==NULL){
+        BST=(Tree)malloc(sizeof(struct TreeNode));
+        BST->Data=X;
+        BST->Left=NULL;
+        BST->Right=NULL;
+        BST->flag=0;
+    }
+    if(BST->Data>X)
+        BST->Left=Insert(BST->Left,X);
+    else if(BST->Data<X)
+        BST->Right=Insert(BST->Right,X);
+    return BST;
+}
+void Reset(Tree T){
+    if(T){
+        T->flag=0;
+        Reset(T->Left);
+        Reset(T->Right);
+    }
+}
+void freeTree(Tree T){
+    if(T->Left)
+        freeTree(T->Left);
+    if(T->Right)
+        freeTree(T->Right);
+    free(T);
+}
+bool Judge(Tree T,int N){
+    ElementType data;
+    int i,flag=0;
+    for(i=0;i<N;i++){
+        cin>>data;
+        if(!check(T,data) && flag==0)
+            flag=1;
+    }
+    if(flag==0)
+        return true;
+    else return false;
+}
+bool check(Tree T,ElementType data){
+    if(T->flag==1){
+        if(T->Data>data)
+            return check(T->Left,data);
+        else if(T->Data<data)
+            return check(T->Right,data);
+        else
+            return false;
+    }
+    else{
+        if(T->Data==data){
+            T->flag=1;
+            return true;
+        }
+        else
+            return false;
+    }
+}
+int main()
+{
+    Tree T;
+    int N,i,L;
+    cin>>N;
+    while(N){
+        cin>>L;
+        T=MakeTree(N);
+        for(i=0;i<L;i++){
+            if(Judge(T,N))
+                cout<<"Yes"<<endl;
+            else
+                cout<<"No"<<endl;
+            Reset(T);
+        }
+        freeTree(T);
+        cin>>N;
+    }
+    return 0;
+}
