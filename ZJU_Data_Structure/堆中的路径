@@ -49,4 +49,81 @@ void insert(int val){
     }
     H[i]=val;
 }
+/**************************************************************************************************/
+/**************************************************************************************************/
+/**************************************************************************************************/
+/*完整建立堆的版本如下*/
+#include<iostream>
+#define MIN -10001
+#define MAXN 1001
+typedef int ElementType;
+using namespace std;
+typedef struct HNode *Heap;
+typedef Heap MinHeap;
+struct HNode{
+    int size;
+    int capacity;
+    ElementType *Data;
+};
+MinHeap BuileMinHeap(int N);
+void PrintPath(MinHeap MHeap,int M);
+void Insert(MinHeap MHeap,ElementType data);
+MinHeap CreateHeap(int N);
+bool isFull(MinHeap MHeap);
 
+MinHeap CreateHeap(int N){
+    MinHeap MHeap;
+    MHeap=(MinHeap)malloc(sizeof(struct HNode));
+    MHeap->capacity=MAXN;
+    MHeap->size=0;
+    MHeap->Data=(ElementType*)malloc((N+1)*sizeof(ElementType));
+    MHeap->Data[0]=MIN;
+    return MHeap;
+}
+MinHeap BuileMinHeap(MinHeap MHeap,int N){
+    ElementType data;
+    int i;
+    for(i=0;i<N;i++){
+        cin>>data;
+        Insert(MHeap,data);
+    }
+    return MHeap;
+}
+bool isFull(MinHeap MHeap){
+    return MHeap->size>MHeap->capacity;
+}
+void Insert(MinHeap MHeap,ElementType data){
+    if(isFull(MHeap)){
+        cout<<"the heap is full";
+        return;
+    }
+    int i;
+    i=++(MHeap->size);
+    for(;data<MHeap->Data[i/2];i/=2)
+        MHeap->Data[i]=MHeap->Data[i/2];
+    MHeap->Data[i]=data;
+}
+void PrintPath(MinHeap MHeap,int M){
+    int i,index;
+    for(i=0;i<M;i++){
+        cin>>index;
+        cout<<MHeap->Data[index];
+        while(index>1){
+            index/=2;
+            cout<<" "<<MHeap->Data[index];
+        }
+        cout<<endl;
+    }
+}
+int main(){
+    MinHeap MHeap;
+    int N,M;
+    cin>>N>>M;
+    MHeap=CreateHeap(N);
+    MHeap=BuileMinHeap(MHeap,N);
+    PrintPath(MHeap,M);
+    return 0;
+}
+
+using namespace std;建立
+using namespace std;
