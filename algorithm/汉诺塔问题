@@ -1,0 +1,20 @@
+#include <iostream>
+using namespace std;
+void move(char a,char b){
+    cout<<a<<" -> "<<b<<endl;
+}
+void Hanoi(int n,char a,char b,char c){
+    if(n>0){
+        Hanoi(n-1,a,c,b);
+        move(a,b);
+        Hanoi(n-1,c,b,a);
+    }
+        
+}
+int main(){
+    for(int i=1;i<4;i++){
+        cout<<"when n="<<i<<":"<<endl;
+        Hanoi(i,'a','b','c');
+    }
+    return 0;
+}
