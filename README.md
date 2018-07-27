@@ -1,3 +1,3 @@
-# hello-world
+# Hello Github
 
-这个文件夹仅用作日常记录使用。
+### Just For Daily Record
