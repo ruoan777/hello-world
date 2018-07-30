@@ -1,0 +1,36 @@
+//
+//  main.cpp
+//  test
+//
+//  Created by Ruoan on 2018/7/27.
+//  Copyright © 2018年 Ruoan. All rights reserved.
+//
+#include<vector>
+#include<iostream>
+using namespace std;
+int* InputData(int age[],int n);
+void BucketSort(int age[],int n);
+
+int* InputData(int age[],int n){
+    int i;
+    for(i=0;i<n;i++)
+        cin>>age[i];
+    return age;
+}
+void BucketSort(int age[],int n){
+    int Bucket[51]={0};
+    int i;
+    for(i=0;i<n;i++)
+        Bucket[age[i]]++;
+    for(i=0;i<=50;i++)
+        if(Bucket[i])
+            cout<<i<<":"<<Bucket[i]<<endl;
+}
+int main(){
+    int n;
+    cin>>n;
+    int *age=new int[n];
+    age=InputData(age,n);
+    BucketSort(age,n);
+    return 0;
+}
