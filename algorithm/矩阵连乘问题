@@ -1,0 +1,27 @@
+/*备忘录方法解矩阵连乘问题，下标的操作比较好记忆一点*/
+#include <iostream>
+using namespace std;
+int m[7][7];
+int s[7][7];
+int p[]={30,35,15,5,10,20,25};
+int LookUpChain(int i,int j){
+    if(m[i][j]>0)
+        return m[i][j];
+    if(i==j)
+        return 0;
+    int u=LookUpChain(i,i)+LookUpChain(i+1,j)+p[i-1]*p[i]*p[j];
+    s[i][j]=i;
+    for(int k=i+1;k<j;k++){
+        int t=LookUpChain(i,k)+LookUpChain(k+1,j)+p[i-1]*p[k]*p[j];
+        if(t<u){
+            u=t;
+            s[i][j]=k;
+        }
+    }
+    m[i][j]=u;
+    return u;
+}
+int main(int argc, const char * argv[]){
+    int res=LookUpChain(1,6);
+    cout<<res<<endl;
+}
