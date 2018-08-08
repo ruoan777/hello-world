@@ -1,0 +1,40 @@
+#include<vector>
+#include<iostream>
+using namespace std;
+int f[1002][10002];
+int max(int a,int b){
+    if(a >= b)
+        return a;
+    else
+        return b;
+}
+int main(){
+    vector<int> Value,Weight;
+    int Capacity;
+    int w,v;
+    Value.push_back(0);
+    Weight.push_back(0);
+    while(1){
+        cin>>v;
+        Value.push_back(v);
+        if(getchar() == '\n')
+            break;
+    }
+    while(1){
+        cin>>w;
+        Weight.push_back(w);
+        if(getchar() == '\n')
+            break;
+    }
+    cin>>Capacity;
+    int N=(int)Value.size();
+    //重量w和价值v
+    for(int i=1;i<=N;i++)
+        for(int j=1;j<=Capacity;j++){
+            if(Weight[i]>j)
+                f[i][j]=f[i-1][j];
+            else
+                f[i][j]=max(f[i-1][j],f[i-1][j-Weight[i]]+Value[i]);
+        }
+    cout<<f[N][Capacity]<<endl;
+}
