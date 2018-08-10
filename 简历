@@ -28,23 +28,23 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{\faGraduationCap\  教育背景}
 \datedsubsection{\textbf{\Large{中国科学院大学}},\large\textbf{上海}}{\Large2016 -- 至今}
-\textit{硕士} \large 电子与通信工程，预计 2019 年 6 月毕业 
+\textit{硕士} \large 电子与通信工程，预计 2019 年 6 月毕业
 \datedsubsection{\textbf{\Large{中国科学技术大学}}, \large\textbf{合肥\textperiodcentered\ 安徽}}{\Large2012 -- 2016}
 \textit{本科} \large 电子信息科学与技术
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{\faUsers\ 学术经历}
 \datedsubsection{\textbf{基于深度学习的图像分类方法的比较及应用}}{2018年1月 -- 2018年6月}
-\large\textbf{实验室项目}\textit{中国科学院大学}\textperiodcentered\ \textit{上海}
+\large\textbf{实验室项目 }\textit{中国科学院大学}\textperiodcentered\ \textit{上海}
 \begin{itemize}[parsep=0.5ex]
-  \item\large 以图像数据集CIFAR-10的分类预测为研究对象，利用谷歌云计算平台
-  \item 实验实现了基于KNN/SVM/Softmax的机器学习算法的分类研究
-  \item 实验实现了使用卷积神经网络算法CNN
-  \item 同时采用L1、L2混合约束的方法
+  \item\large 以图像数据集CIFAR-10为研究对象，利用Google云计算平台进行分类预测
+  \item 实验实现了KNN/SVM/Softmax在数据集上的分类结果
+  \item 实验实现了卷积神经网络算法CNN在数据集上的分类结果
   \item 实验验证了卷积神经网络对对大数据集的分类处理能力
+  \item 掌握了深度学习的主要流程框架
 \end{itemize}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \datedsubsection{\textbf{膀胱癌疾病-基因优先化研究} }{2015年8月 -- 2016年3月}
-\large\textbf{大学生研究计划} \textit{中国科大}\textperiodcentered\ \textit{合肥}
+\large\textbf{大学生研究计划 }\textit{中国科大}\textperiodcentered\ \textit{合肥}
 \begin{itemize}[parsep=0.5ex]
   \item\large 利用现有的癌症疾病数据库TCGA的膀胱癌数据集
   \item 采用基于异构网络的方法整合多组学数据，进行模型组建
@@ -58,23 +58,21 @@
   \item\large 编程: C > C++ = Matlab >Python
   \item 英语: CET-6，可熟练阅读英文技术文档
   \item 算法: 熟悉机器学习常用算法，熟悉常用的数据结构，了解深度学习基本理论
-  \item 其他: 会使用Latex等
+  \item 其他: 会使用LaTex等
 \end{itemize}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{\faHeartO\ 校园经历}
-%\datedsubsection{\textbf{上海交通大学}}{2014年6月 -- 2014年8月}
-%\textbf{C9高校暑期交流} \textit{上海}
-
 \datedsubsection{\textbf{中国科大信息学院学生会} }{2013年6月 -- 2014年6月}
 \large\textbf{科技部副部长} \textit{合肥}
 \begin{itemize}[parsep=0.5ex]
   \item\large 组织策划的"无线电测向"活动，被评为当年度校级优秀活动。
   \item 负责信息学院学生会其他日常活动，被评为年度优秀团员。
+  \item 参加上海交通大学C9高校夏令营、中科院深圳先进技术研究院夏令营并被评为优秀营员
 \end{itemize}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{\faInfo\ 自我评价}
 \begin{itemize}[parsep=0.5ex]
-  \item\large 具有较为扎实的学术研究经历，热爱新事物、新技术
-  \item 热爱编程，
+  \item\large 具有扎实的学术研究经历，容易接受新事物、新技术
+  \item 热爱编程，有较强的自学能力，希望在三年后成为一名c++高级工程师
 \end{itemize}
 \end{document}
