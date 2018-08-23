@@ -1,0 +1,27 @@
+//
+//  main.cpp
+//  C++Primer
+//
+//  Created by Ruoan on 2018/8/22.
+//  Copyright © 2018年 Ruoan. All rights reserved.
+//
+
+#include<string>
+#include<iostream>
+using namespace std;
+int main(){
+    string str;
+    int i;
+    string::size_type l;
+    while(cin>>str){
+        l=str.length();
+        for(i=0;i<l;i++){
+            if(str[i]>='a'&&str[i]<='z')
+                str[i]=str[i]-32;
+            else if(str[i]>='A'&&str[i]<='Z')
+                str[i]=str[i]+32;
+        }
+        cout<<str;
+    }
+    return 0;
+}
