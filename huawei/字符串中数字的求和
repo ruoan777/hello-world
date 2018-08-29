@@ -1,0 +1,40 @@
+/*
+给定一个字符串str,求其中全部整数数字之和
+如：AB1CD2E33 输出 36
+AB-1CD--2EF---3 输出 -2
+*/
+#include<iostream>
+#include<string>
+using namespace std;
+void countSum(string str){
+    int i=0,j;
+    int sum=0;
+    for(i=0;i<str.size();i++){
+        if(isdigit(str[i])){
+            j=i+1;
+            for(;j<str.size();j++)
+                if(!isdigit(str[j]))
+                    break;
+            string temp=str.substr(i,j-i);
+            int b=stoi(temp);
+            int countMin=0;
+            for(int k=i-1;k>=0;k--){
+                if(str[k]=='-')
+                    countMin++;
+                else
+                    break;
+            }
+            if(countMin%2==1)
+                b=b*(-1);
+            sum+=b;
+            i=j;
+        }
+    }
+    cout<<sum<<endl;
+}
+int main(){
+    string str;
+    cin>>str;
+    countSum(str);
+    return 0;
+}
