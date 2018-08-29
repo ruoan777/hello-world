@@ -1,0 +1,47 @@
+#include <iostream>
+#include <complex>
+#include "math.h"
+using namespace std;
+int main() {
+    int na=5;
+    int nb=5;
+    int nc=na+nb;
+    complex<double> a[na];
+    complex<double> b[nb];
+    complex<double> c[nc];
+    double co_in[2*nc];
+    int cnt=0;
+    while(cnt<2*nc)
+    {
+        cin>>co_in[cnt];
+        if(cnt%2==1){//输入虚部时候
+            if(cnt<2*na){//先输入a
+                a[cnt/2] += complex<double>(co_in[cnt-1],co_in[cnt]);
+            }
+            else{
+                b[cnt/2-na] += complex<double>(co_in[cnt-1],co_in[cnt]);
+            }
+        }
+        cnt++;
+    }
+    cnt=0;
+    while(cnt<nc){
+        int tmp=0;
+        while(tmp<=cnt){
+            if ((tmp<na) && ((cnt-tmp)<nb)){
+                c[cnt] += a[tmp]*b[cnt-tmp];
+            }
+            tmp++;
+        }
+        if(cnt==nc-1){
+            if (!(c[cnt].real()==0 && c[cnt].imag()==0)){
+                cout<<c[cnt].real()<<endl<<c[cnt].imag()<<endl;
+            }
+        }
+        else{
+            cout<<c[cnt].real()<<endl<<c[cnt].imag()<<endl;
+        }
+        cnt++;
+    }
+    return 0;
+}
