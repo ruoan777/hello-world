@@ -1,0 +1,74 @@
+/*
+ 输入：
+ 三行数字：
+    第一行：8 10 6 3 7 2
+    第二行：4 6  2 2 5 1
+    第三行：12
+ 输出：
+ 一个数字用来表示结果
+    24
+ 更进一步：
+ 可以输出选中的是哪些物品，1 表示选，0 表示不选
+ 输出：
+    1 1 1 0 0 0
+ 价值数组Value = {8, 10, 6, 3, 7, 2}，
+ 重量数组Weight = {4, 6, 2, 2, 5, 1}，
+ 背包容量Capacity = 12
+*/
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main(){
+    vector<int> Value,Weight;
+    int Capacity;
+    int w,v;
+    Value.push_back(0);//为便于表示，第0个位置不参与计算
+    Weight.push_back(0);
+    while(1){
+        cin>>v;
+        Value.push_back(v);
+        if(getchar() == '\n')
+            break;
+    }
+    while(1){
+        cin>>w;
+        Weight.push_back(w);
+        if(getchar() == '\n')
+            break;
+    }
+    cin>>Capacity;
+    int n=(int)Value.size();
+    vector<vector<int>> m(n,vector<int>(Capacity+1));
+    for(int i=1;i<=n-1;i++){
+        for(int j=1;j<=Capacity;j++){
+            if(j<Weight[i])
+                m[i][j]=m[i-1][j];
+            else
+                m[i][j]=max(m[i-1][j],m[i-1][j-Weight[i]]+Value[i]);
+        }
+    }
+    cout<<m[n-1][Capacity]<<endl;
+    
+    for(int i=1;i<=n-1;i++){
+        for(int j=1;j<=Capacity;j++){
+            cout<<m[i][j]<<' ';
+        }
+        cout<<endl;
+    }
+    int *x=new int[n];
+    for(int i=n-1;i>1;i--)
+    {
+        if(m[i][Capacity]==m[i-1][Capacity])
+            x[i]=0;
+        else
+        {
+            x[i]=1;
+            Capacity-=Weight[i];
+        }
+    }
+    x[1]=(m[1][Capacity]>0)?1:0;
+    for(int i=1;i<n;i++)
+        cout<<x[i]<<" ";
+    return 0;
+}
