@@ -1,10 +1,10 @@
 ## typedef的转换
->C++中的typedef好处很多，可以让标准化自己DIY的类型。
-为便于理解typedef能干啥，本题考察各种typedef后，某个自定义类型的最终形态是啥。
-输入为两部分，共两行：
-第一行是一堆typedef定义，标准C++语句，以分号结束，这里不用考虑struct/union这类，只需要考虑基本类型和指针。
-第二行是制定某个自定义type
-输出为该自定义type的最终形态
+>C++中的typedef好处很多，可以让标准化自己DIY的类型。  
+为便于理解typedef能干啥，本题考察各种typedef后，某个自定义类型的最终形态是啥。  
+输入为两部分，共两行：  
+第一行是一堆typedef定义，标准C++语句，以分号结束，这里不用考虑struct/union这类，只需要考虑基本类型和指针。  
+第二行是制定某个自定义type  
+输出为该自定义type的最终形态  
 如输入：
 ```cpp
 typedef int INT; typedef INT** INTP;
