@@ -22,8 +22,10 @@ int * *
 #include <vector>
 #include <string>
 #include <map>
+
 using namespace std;
 int main(){
+    int flag=0;
     vector<string> s;
     string temp,res;
     map<string,string> hashtable;
@@ -35,41 +37,61 @@ int main(){
             break;
     }
     cin>>res;
-    //////////////
-    res=res+";";
+    //输入处理完成
+    /***********************************************/
+    for(auto i=s.begin();i!=s.end();i++){
+        if((*i).back() == ';')
+            (*i).erase((*i).end()-1);//处理输入的";"
+    }
+    /***********************************************/
     string constant="typedef";
     for(int i=0;i<s.size();i++){
-        if(s[i]==constant){//如果当前的i对应的s为typedef
-            it=hashtable.begin();
-            while(it!=hashtable.end()){//在已有的hash表中查找
-                string Now=s[i+1];
-                for(int j=0;j<Now.size();j++)
-                    if(Now[j]=='*'){
+        if(s[i]==constant){//如果当前的s[i]为typedef
+            string Now=s[i+1];
+            if(Now.back() == '*'){
+                for(auto j=0;j<Now.size();j++){
+                    if(Now[j] == '*'){
                         string NowTheLeft=Now.substr(0,j);
                         string NowTheRight=Now.substr(j);
-                        if(it->first==(NowTheLeft+";")){
+                        if((it=hashtable.find(NowTheLeft))!=hashtable.end()){
                             s[i+1]=it->second+NowTheRight;
-                            break;
                         }
+                        else if(isupper(Now[0]))
+                            flag=1;
+                        else
+                            break;
                     }
-                ++it;
+                }
             }
+            else if((it=hashtable.find(Now))!=hashtable.end())
+                s[i+1]=it->second;
+            else if(isupper(Now[0]))
+                flag=1;
+            else
+                continue;
             hashtable[s[i+2]]=s[i+1];
             i=i+2;
         }
     }
     string output=hashtable[res];
-    string OUT;
     for(int i=0;i<output.size();i++)
         if(output[i]=='*'){
-            OUT=output.substr(0,i)+' '+output.substr(i);
+            output=output.substr(0,i)+' '+output.substr(i);
             break;
         }
-    cout<<OUT<<endl;
+    if(flag==1)
+        cout<<"none";
+    else
+        cout<<output<<endl;
+    return 0;
 }
 
-//typedef int INT; typedef INT** CHAR; typedef CHAR INTP;
-//typedef int INT; typedef char CHAR; typedef CHAR** CHARP;
-//typedef int INT; typedef CHAR** CHARP; typedef char CHAR;
+//typedef int INT; typedef INT** CHAR; typedef CHAR INTP;    正确
+//typedef int INT; typedef char CHAR; typedef CHAR** CHARP;  正确
+//typedef int INT; typedef char* CHAR; typedef CHAR* CHARR;  正确
+//typedef int INT; typedef CHAR CHARP; typedef CHAR* CHARRR;  none
+//typedef int INT; typedef CHAR CHARP; typedef char CHAR;  none
+
+
 
 ```
