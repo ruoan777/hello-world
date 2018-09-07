@@ -1,6 +1,6 @@
 ### B站笔试题
-![b1b9563400ebbfe4498a8b71fa14e079.jpeg](evernotecid://D3246D17-20EC-4D80-977C-C4EA836A7547/appyinxiangcom/13597806/ENResource/p1348)
-![af2bf3387ee30c606dcaf6cd17b6cfdb.jpeg](evernotecid://D3246D17-20EC-4D80-977C-C4EA836A7547/appyinxiangcom/13597806/ENResource/p1349)
+![b1b9563400ebbfe4498a8b71fa14e079.jpeg](https://github.com/ruoan777/hello-world/blob/master/upload-graph/B1.jpeg)
+![af2bf3387ee30c606dcaf6cd17b6cfdb.jpeg](https://github.com/ruoan777/hello-world/blob/master/upload-graph/B2.jpeg)
 
 ```cpp
 #include <iostream>
