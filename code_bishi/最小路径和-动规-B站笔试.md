@@ -1,8 +1,7 @@
 ### B站笔试题
+#### >动态规划
 ![b1b9563400ebbfe4498a8b71fa14e079.jpeg](https://github.com/ruoan777/hello-world/blob/master/upload-graph/B1.jpeg)
 ![af2bf3387ee30c606dcaf6cd17b6cfdb.jpeg](https://github.com/ruoan777/hello-world/blob/master/upload-graph/B2.jpeg)
-<img src="https://github.com/ruoan777/hello-world/blob/master/upload-graph/B1.jpeg" width = "600" height = "600" alt="demo2" />
-<img src="https://github.com/ruoan777/hello-world/blob/master/upload-graph/B2.jpeg" width = "600" height = "600" alt="demo2" />
 ```cpp
 #include <iostream>
 #include <sstream>
@@ -55,13 +54,13 @@ int main(){
 
 
 /*
- 3
- 5,5,7
- 6,7,8
- 2,2,4
- 3
- 1,3,1
- 1,5,1
- 4,2,1
+3
+5,5,7
+6,7,8
+2,2,4
+3
+1,3,1
+1,5,1
+4,2,1
  */
 ```
